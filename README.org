@@ -1,6 +1,6 @@
 * Description
 
-A nix flake that installs Pianoteq7 on nixos. The license key and binary are still required and
+A nix flake that installs Pianoteq8 on nixos. The license key and binary are still required and
 have to be acquired manually from https://www.modartt.com/.
 
 * Usage
@@ -8,11 +8,11 @@ have to be acquired manually from https://www.modartt.com/.
 Right now, I am really new to NixOS and Nix so this might be an awkward way of installing a package.
 I might try to enhance this in the future and maybe even put it in the NUR.
 
-1. Download the ~pianoteq_linux_v754.7z~ file from https://www.modartt.com/
-2. Put ~pianoteq_linux_v754.7z~ into the nix store
+1. Download the ~pianoteq_linux_v841.7z~ file from https://www.modartt.com/
+2. Put ~pianoteq_linux_v841.7z~ into the nix store
 
 #+begin_src sh :results output scalar
-nix-store --add-fixed sha256 ./pianoteq_linux_v754.7z
+nix store add-file ./pianoteq_linux_v841.7z
 #+end_src
 
 3. In your main flake.nix file add the following line to your inputs
@@ -20,7 +20,7 @@ nix-store --add-fixed sha256 ./pianoteq_linux_v754.7z
 #+begin_src nix :results output scalar
 inputs = {
   #...
-  pianoteq.url = "github:qhga/nix-pianoteq7";
+  pianoteq.url = "github:qhga/nix-pianoteq";
   #...
 };
 #+end_src
@@ -41,7 +41,7 @@ inputs = {
 2. Get the new sha256 hash in sri format
 
 #+begin_src sh :results output scalar
-nix hash to-sri --type sha256 `sha256sum pianoteq_linux_$NEW_VERSION.7z`
+nix hash to-sri --type sha256 `sha256sum pianoteq_linux_$NEW_VERSION.7z | awk '{print $1}'`
 #+end_src
 
 3. Change the version numbers in the flake.nix file and adjust the sha256 hash
@@ -49,7 +49,7 @@ nix hash to-sri --type sha256 `sha256sum pianoteq_linux_$NEW_VERSION.7z`
 #+begin_src nix :results output scalar
         src = requireFile {
           name = "pianoteq_linux_$NEW_VERSION.7z";
-          message = "Download the file from: https://www.modartt.com/download?file=pianoteq_linux_v754.7z and add it to the nix store manually: nix-store --add-fixed sha256 ./pianoteq_linux_v754.7z";
+          message = "Download the file from: https://www.modartt.com/download?file=pianoteq_linux_$NEW_VERSION.7z and add it to the nix store manually: nix store add-file ./pianoteq_linux_$NEW_VERSION.7z";
           sha256 = "$NEW_HASH";
         };
 #+end_src
@@ -57,5 +57,5 @@ nix hash to-sri --type sha256 `sha256sum pianoteq_linux_$NEW_VERSION.7z`
 4. Put the new release 7z into the nix store
 
 #+begin_src sh :results output scalar
-nix-store --add-fixed sha256 ./pianoteq_linux_$NEW_VERSION.7z
+nix store add-file ./pianoteq_linux_$NEW_VERSION.7z
 #+end_src

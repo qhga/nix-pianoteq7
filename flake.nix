@@ -9,7 +9,8 @@
       with import nixpkgs { system = "x86_64-linux"; };
       stdenv.mkDerivation rec {
         pname = "pianoteq";
-        version = "7.5.4";
+        version = "8.4.1";
+        in_file = "pianoteq_linux_v841.7z";
 
         icon = fetchurl {
           name = "pianoteq_icon_128";
@@ -19,11 +20,12 @@
 
         # IMPORTANT: Use the following command to retrive the correct hash.
         # Otherwise the file is not found in the nix store (Add it first ofc)
-        # nix hash to-sri --type sha256 `sha256sum pianoteq_linux_v754.7z`
+        # nix hash to-sri --type sha256 `sha256sum ./pianoteq_linux_v???.7z | awk '{print $1}'`
+
         src = requireFile {
-          name = "pianoteq_linux_v754.7z";
-          message = "Download the file from: https://www.modartt.com/download?file=pianoteq_linux_v754.7z and add it to the nix store manually: nix-store --add-fixed sha256 ./pianoteq_linux_v754.7z";
-          sha256 = "sha256-TA9CiuT21fQedlMUGz7bNNxYun5ArmRjvIxjOGqXDCs=";
+          name = "${in_file}";
+          message = "Download the file from: https://www.modartt.com/download?file=${in_file} and add it to the nix store manually: nix store add-file ./${in_file}";
+          sha256 = "sha256-ETp/Z+6ldxIXyB5gg77pH4rSjFi4zYDsh4PbpkDzX6A=";
         };
 
         # Alternative: Downloaded manually and place in this directory
@@ -31,9 +33,9 @@
 
         desktopItems = [
           (makeDesktopItem {
-            name = "pianoteq7";
-            desktopName = "Pianoteq 7";
-            exec = "pianoteq7";
+            name = "pianoteq8";
+            desktopName = "Pianoteq 8";
+            exec = "pianoteq8";
             icon = "pianoteq_icon_128";
           })
         ];
@@ -51,20 +53,21 @@
           stdenv.cc.cc.lib
           libjack2
           lv2
+          libGL
         ];
 
         unpackCmd = "7z x ${src}";
 
         # `runHook postInstall` is mandatory otherwise postInstall won't run
         installPhase = ''
-          install -Dm 755 x86-64bit/Pianoteq\ 7 $out/bin/pianoteq7
-          install -Dm 755 x86-64bit/Pianoteq\ 7.lv2/Pianoteq_7.so \
-                          $out/lib/lv2/Pianoteq\ 7.lv2/Pianoteq_7.so
+          install -Dm 755 x86-64bit/Pianoteq\ 8 $out/bin/pianoteq8
+          install -Dm 755 x86-64bit/Pianoteq\ 8.lv2/Pianoteq_8.so \
+                          $out/lib/lv2/Pianoteq\ 8.lv2/Pianoteq_8.so
           patchelf --set-interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" \
-                   --set-rpath $libPath "$out/bin/pianoteq7"
-          cd x86-64bit/Pianoteq\ 7.lv2/
+                   --set-rpath $libPath "$out/bin/pianoteq8"
+          cd x86-64bit/Pianoteq\ 8.lv2/
           for i in *.ttl; do
-              install -D "$i" "$out/lib/lv2/Pianoteq 7.lv2/$i"
+              install -D "$i" "$out/lib/lv2/Pianoteq 8.lv2/$i"
           done
           runHook postInstall
         '';
