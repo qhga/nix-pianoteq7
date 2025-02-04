@@ -3,6 +3,8 @@
 A nix flake that installs Pianoteq8 on nixos. The license key and binary are still required and
 have to be acquired manually from https://www.modartt.com/.
 
+*NOTE:* You can also install older versions by selecting the respective ~tag~ from the ~branch~ dropdown.
+
 * Usage
 
 Right now, I am really new to NixOS and Nix so this might be an awkward way of installing a package.
