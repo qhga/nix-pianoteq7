@@ -25,7 +25,7 @@
         src = requireFile {
           name = "${in_file}";
           message = "Download the file from: https://www.modartt.com/download?file=${in_file} and add it to the nix store manually: nix store add-file ./${in_file}";
-          sha256 = "sha256-ETp/Z+6ldxIXyB5gg77pH4rSjFi4zYDsh4PbpkDzX6A=";
+          sha256 = "sha256-PPRSZ0qnDfWyTaQGuB0osWvIPHYMPaSB159FDrXaY0E=";
         };
 
         # Alternative: Downloaded manually and place in this directory
